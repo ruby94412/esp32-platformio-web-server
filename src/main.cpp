@@ -1,6 +1,7 @@
 #include <Arduino.h>
 #include <WiFi.h>
 #include "asyncServer.h"
+#include "deviceBridge.h"
 
 #define STASSID "anjia_5G"
 #define STAPSK "64595969"
@@ -25,7 +26,9 @@ void setup() {
   Serial.print("IP address: ");
   Serial.println(WiFi.localIP());
   startWebServer();
+  startModbus();
 }
 
 void loop() {
+  modbusInLoop();
 }

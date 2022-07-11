@@ -2,6 +2,7 @@
 #include <ArduinoJson.h>
 #include <AsyncJson.h>
 #include "asyncServer.h"
+#include "deviceBridge.h"
 
 
 AsyncWebServer server(80);
@@ -62,7 +63,7 @@ void listenToPostRequest(AsyncWebServerRequest *request, uint8_t *data, size_t l
 }
 
 void handleRoot(AsyncWebServerRequest *request) {
-  request->send(200, "text/plain", "temperature");
+  request->send(200, "text/plain", temperature);
 }
 
 void startWebServer() {

@@ -1,6 +1,5 @@
 #include <AsyncEventSource.h>
 #include <ArduinoJson.h>
-#include <AsyncJson.h>
 #include "asyncServer.h"
 #include "deviceBridge.h"
 

@@ -1,10 +1,12 @@
 #include <Arduino.h>
-#include <WiFi.h>
+#include <WiFiClientSecure.h>
 #include "asyncServer.h"
 #include "deviceBridge.h"
+#include "wsClient.h"
 
 #define STASSID "anjia_5G"
 #define STAPSK "64595969"
+const int port = 443;
 
 const char* ssid = STASSID;
 const char* password = STAPSK;
@@ -12,9 +14,8 @@ const char* password = STAPSK;
 
 void setup() {
   Serial.begin(115200);
+  WiFi.mode(WIFI_STA);      
   WiFi.begin(ssid, password);
-  Serial.println("monitor");
-
   // Wait for connection
   while (WiFi.status() != WL_CONNECTED) {
     delay(500);
@@ -27,6 +28,7 @@ void setup() {
   Serial.println(WiFi.localIP());
   startWebServer();
   startModbus();
+  startClient();
 }
 
 void loop() {

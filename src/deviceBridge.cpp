@@ -1,5 +1,7 @@
 #include "ModbusMaster.h"
 #include "deviceBridge.h"
+#include "wsClient.h"
+#include "esp_websocket_client.h"
 
 #define MAX485_RE_NEG  4 
 #define Slave_ID       1    
@@ -80,10 +82,11 @@ void modbusInLoop()
     
     if (getResultMsg(&modbus, result)) 
     {
-      Serial.println();
       double res_dbl = ((double)modbus.getResponseBuffer(0)) / 10;
       temperature = "Current temperture: " + String(res_dbl) + "°C";
       Serial.println(temperature);
+      // webSocketsClient.sendTXT(temperature);
+      esp_websocket_client_send_text(client, temperature.c_str(), temperature.length(), 10000);
     }
     lastMillis = currentMillis;
   }

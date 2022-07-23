@@ -79,14 +79,15 @@ void modbusInLoop()
   if (currentMillis - lastMillis > 1000) 
   {
     uint8_t result = modbus.readInputRegisters(0x00, 6);
-    
+    // modbus.writeSingleRegister(0x00, 100);
     if (getResultMsg(&modbus, result)) 
     {
       double res_dbl = ((double)modbus.getResponseBuffer(0)) / 10;
-      temperature = "Current temperture: " + String(res_dbl) + "°C";
+      temperature = String(res_dbl);
       Serial.println(temperature);
       // webSocketsClient.sendTXT(temperature);
       esp_websocket_client_send_text(client, temperature.c_str(), temperature.length(), 10000);
+    
     }
     lastMillis = currentMillis;
   }

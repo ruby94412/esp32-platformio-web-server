@@ -1,3 +1,4 @@
+#include "ModbusMaster.h"
 #ifndef DEVICEBRIDGE_H /* include guards */
 #define DEVICEBRIDGE_H
 
@@ -5,5 +6,6 @@
 void startModbus();
 void modbusInLoop();
 extern String temperature;
+extern ModbusMaster modbus;
 
 #endif /* DEVICEBRIDGE_H */

@@ -82,11 +82,16 @@ void modbusInLoop()
     // modbus.writeSingleRegister(0x00, 100);
     if (getResultMsg(&modbus, result)) 
     {
-      double res_dbl = ((double)modbus.getResponseBuffer(0)) / 10;
-      temperature = String(res_dbl);
-      Serial.println(temperature);
+      String dataList[2];
+      String props[2];
+      dataList[0] = String(((double)modbus.getResponseBuffer(0)) / 10);
+      dataList[1] = String(((double)modbus.getResponseBuffer(3)) / 10);
+      props[0] = "temperture";
+      props[1] = "sv";
+      String data = parseDataToJSONString(dataList, props, 2);
+      Serial.println(data);
       // webSocketsClient.sendTXT(temperature);
-      esp_websocket_client_send_text(client, temperature.c_str(), temperature.length(), 10000);
+      esp_websocket_client_send_text(client, data.c_str(), data.length(), 10000);
     
     }
     lastMillis = currentMillis;

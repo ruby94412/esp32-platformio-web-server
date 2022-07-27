@@ -28,33 +28,37 @@ void websocket_event_handler(void *handler_args, esp_event_base_t base, int32_t 
     
     switch (event_id) {
         case WEBSOCKET_EVENT_CONNECTED:
-            Serial.println("WEBSOCKET_EVENT_CONNECTED");
-            break;
+          Serial.println("WEBSOCKET_EVENT_CONNECTED");
+          break;
         case WEBSOCKET_EVENT_DISCONNECTED:
-            Serial.println("WEBSOCKET_EVENT_DISCONNECTED");
-            break;
-
+          Serial.println("WEBSOCKET_EVENT_DISCONNECTED");
+          break;
         case WEBSOCKET_EVENT_DATA:{
-        	  Serial.println("WEBSOCKET_EVENT_DATA");
+        	Serial.println("WEBSOCKET_EVENT_DATA");
             /*
             *   1.malloc 2.sprintf 3.char * 4.data->data_len
             */
-            char * buffer;
-            buffer = (char *) malloc(data->data_len * sizeof(char));
-            sprintf(buffer, "%.*s", data->data_len, (char *)data->data_ptr);
-            DynamicJsonDocument doc(512);
-            deserializeJson(doc, buffer);
-            if (doc["type"] == "POST") {
-              const int data = doc["data"];
-              Serial.println(data);
-              modbus.writeSingleRegister(0x00, data);
-            };
-            break;
+          const char *buffer = data->data_ptr;
+          char local[data->data_len];
+          for (int i=0; i<data->data_len; i++) {
+            local[i] = buffer[i];
+          }
+            // Serial.println(buffer);
+            // char * buffer = (char *) malloc(data->data_len * sizeof(char));
+            // sprintf(buffer, "%.*s", data->data_len, (char *)data->data_ptr);
+          DynamicJsonDocument doc(512);
+          deserializeJson(doc, local);
+          if (doc["type"] == "POST") {
+            const int data = doc["data"];
+            Serial.println(data);
+            modbus.writeSingleRegister(0x00, data);
+          };
+          break;
         }
         
         case WEBSOCKET_EVENT_ERROR:
-            Serial.println("WEBSOCKET_EVENT_ERROR");
-            break;
+          Serial.println("WEBSOCKET_EVENT_ERROR");
+          break;
     }
 }
 
